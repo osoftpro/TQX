@@ -1,0 +1,527 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .welcome-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 500px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    .welcome-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .welcome-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 20px;
+    }
+
+    .welcome-time {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+
+    .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .quick-stat {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .quick-stat-label {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+
+    .quick-stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        margin-top: 8px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        border: 2px solid #f0f0f0;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-icon {
+        font-size: 32px;
+        margin-bottom: 15px;
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #95a5a6;
+        letter-spacing: 1px;
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 10px 0;
+    }
+
+    .stat-change {
+        font-size: 12px;
+        color: #27ae60;
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        border-color: #667eea;
+    }
+
+    .action-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .action-title {
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 15px;
+    }
+
+    .action-description {
+        font-size: 12px;
+        color: #95a5a6;
+    }
+
+    .action-card a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .section-title i {
+        color: #667eea;
+    }
+
+    .recent-activity {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .activity-item {
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .activity-item:hover {
+        background: #f8f9fa;
+    }
+
+    .activity-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 3px;
+    }
+
+    .activity-time {
+        font-size: 12px;
+        color: #95a5a6;
+    }
+
+    .activity-amount {
+        font-weight: 700;
+        color: #27ae60;
+    }
+
+    .chart-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .progress-bar-wrapper {
+        background: #f0f0f0;
+        height: 8px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    .progress-bar-fill {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        height: 100%;
+        border-radius: 10px;
+    }
+
+    @@media (max-width: 768px) {
+        .welcome-title {
+            font-size: 24px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+        }
+
+        .quick-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- Welcome Banner -->
+<div class="welcome-banner">
+    <div class="welcome-content">
+        <div class="welcome-title">
+            <i class="fas fa-wave-hand"></i> Welcome Back
+        </div>
+        <div class="welcome-subtitle">
+            You're all set to manage your extension portal
+        </div>
+        <div class="welcome-time">
+            <i class="fas fa-calendar-alt"></i> @DateTime.Now.ToString("dddd, MMMM d, yyyy")
+        </div>
+        <div class="quick-stats">
+            <div class="quick-stat">
+                <div class="quick-stat-label">Today's Activity</div>
+                <div class="quick-stat-value">12</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-label">Pending Tasks</div>
+                <div class="quick-stat-value">5</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-label">This Month</div>
+                <div class="quick-stat-value">₦234K</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Metrics -->
+<div class="row g-4 mb-5">
+    <div class="col-lg-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-house"></i>
+            </div>
+            <div class="stat-label">Total Houses(TQX)</div>
+            <div class="stat-value">48</div>
+            <div class="stat-change">
+                <i class="fas fa-arrow-up"></i> +2 this month
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="stat-label">Total Payments</div>
+            <div class="stat-value">₦2.5M</div>
+            <div class="stat-change">
+                <i class="fas fa-arrow-up"></i> +12% vs last month
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <div class="stat-label">Total Expenses</div>
+            <div class="stat-value">₦540K</div>
+            <div class="stat-change">
+                <i class="fas fa-arrow-down"></i> -5% vs last month
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-label">Pending Payments</div>
+            <div class="stat-value">12</div>
+            <div class="stat-change">
+                <i class="fas fa-info-circle"></i> Action needed
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions & Recent Activity -->
+<div class="row g-4 mb-5">
+    <!-- Quick Actions -->
+    <div class="col-lg-6">
+        <h3 class="section-title">
+            <i class="fas fa-bolt"></i> Quick Actions
+        </h3>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <a asp-action="Create" asp-controller="Payments" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div class="action-title">Record Payment</div>
+                    <div class="action-description">Add new payment transaction</div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a asp-action="Create" asp-controller="Expenses" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="action-title">Add Expense</div>
+                    <div class="action-description">Record expense entry</div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a asp-action="Create" asp-controller="Houses" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="action-title">Register House</div>
+                    <div class="action-description">Add new property</div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a asp-action="Index" asp-controller="Payments" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <div class="action-title">All Payments</div>
+                    <div class="action-description">View payment history</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="col-lg-6">
+        <h3 class="section-title">
+            <i class="fas fa-history"></i> Recent Activity
+        </h3>
+        <div class="recent-activity">
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-money-bill"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">Payment Recorded</div>
+                    <div class="activity-time">2 hours ago</div>
+                </div>
+                <div class="activity-amount">+₦50,000</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">Expense Added</div>
+                    <div class="activity-time">5 hours ago</div>
+                </div>
+                <div class="activity-amount">-₦12,500</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);">
+                    <i class="fas fa-house"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">House Registered</div>
+                    <div class="activity-time">1 day ago</div>
+                </div>
+                <div class="activity-amount">House #45</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">Payment Completed</div>
+                    <div class="activity-time">2 days ago</div>
+                </div>
+                <div class="activity-amount">✓ Confirmed</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Performance Charts -->
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="chart-container">
+            <h5 style="color: #2c3e50; margin-bottom: 20px;">
+                <i class="fas fa-chart-line"></i> Payment Collection Rate
+            </h5>
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span style="font-size: 12px; color: #95a5a6;">January</span>
+                    <span style="font-weight: 700; color: #2c3e50;">85%</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar-fill" style="width: 85%;"></div>
+                </div>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span style="font-size: 12px; color: #95a5a6;">February</span>
+                    <span style="font-weight: 700; color: #2c3e50;">92%</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar-fill" style="width: 92%;"></div>
+                </div>
+            </div>
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span style="font-size: 12px; color: #95a5a6;">March</span>
+                    <span style="font-weight: 700; color: #2c3e50;">78%</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div class="progress-bar-fill" style="width: 78%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="chart-container">
+            <h5 style="color: #2c3e50; margin-bottom: 20px;">
+                <i class="fas fa-pie-chart"></i> Top Categories
+            </h5>
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; align-items: center;">
+                    <div>
+                        <span style="display: inline-block; width: 12px; height: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 2px; margin-right: 8px;"></span>
+                        <span style="font-size: 12px; color: #95a5a6;">Maintenance</span>
+                    </div>
+                    <span style="font-weight: 700; color: #2c3e50;">45%</span>
+                </div>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; align-items: center;">
+                    <div>
+                        <span style="display: inline-block; width: 12px; height: 12px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 2px; margin-right: 8px;"></span>
+                        <span style="font-size: 12px; color: #95a5a6;">Utilities</span>
+                    </div>
+                    <span style="font-weight: 700; color: #2c3e50;">30%</span>
+                </div>
+            </div>
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; align-items: center;">
+                    <div>
+                        <span style="display: inline-block; width: 12px; height: 12px; background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); border-radius: 2px; margin-right: 8px;"></span>
+                        <span style="font-size: 12px; color: #95a5a6;">Administration</span>
+                    </div>
+                    <span style="font-weight: 700; color: #2c3e50;">25%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,230 @@
+﻿@model TnaboExtApp.Models.House
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<style>
+
+    #processingOverlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 9999;
+    }
+
+    .processing-box {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        text-align: center;
+        width: 350px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 6px solid #ddd;
+        border-top: 6px solid #007bff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px auto;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .processing-box h4 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .processing-box p {
+        color: #666;
+        font-size: 14px;
+    }
+</style>
+
+<h4 style="text-align:center"><b>NEW HOUSE NUMBERING FOR @ViewBag.StreetName OF @ViewBag.PhaseName</b></h4>
+
+@if (ViewBag.HouseNo != null)
+{
+    <hr />
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading"><b>New House Registration Detail</b></h4>
+        <hr />
+        <p><b>Owner:</b> @ViewBag.OwnerName</p>
+        <p><b>House No:</b> @ViewBag.HouseNo</p>
+    </div>
+}
+
+@if (ViewBag.Fail != null)
+{
+    <hr />
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><b>@ViewBag.Fail</b></h4>
+    </div>
+}
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="display:none">
+                <label asp-for="StreetId" class="control-label"></label>
+                <input asp-for="StreetId" class="form-control" value="@ViewBag.StreetId" />
+                <span asp-validation-for="StreetId" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="PhaseId" class="control-label"></label>
+                <input asp-for="PhaseId" class="form-control" value="@ViewBag.PhaseId" />
+                <span asp-validation-for="PhaseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhaseName" class="control-label"></label>
+                <input asp-for="PhaseName" class="form-control" readonly="readonly" value="@ViewBag.PhaseName" />
+                <span asp-validation-for="PhaseName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StreetName" class="control-label"></label>
+                <input asp-for="StreetName" class="form-control" readonly="readonly" value="@ViewBag.StreetName" />
+                <span asp-validation-for="StreetName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerName" class="control-label"></label>
+                <input asp-for="OwnerName" class="form-control" required="required" />
+                <span asp-validation-for="OwnerName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Longitude" class="control-label"></label>
+                <input asp-for="Longitude" class="form-control" id="long" onfocus="getLocation()" required="required" />
+                <span asp-validation-for="Longitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Latitude" class="control-label"></label>
+                <input asp-for="Latitude" class="form-control" id="lat" readonly="readonly" required="required" />
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" asp-items="@ViewBag.Status" class="form-control" required="required"><option selected value="" disabled>--Select Status--</option></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+                <input type="file" id="photo" name="FileUpload">
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-success btnsubmit btn-group-lg" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="processingOverlay">
+    <div class="processing-box">
+        <div class="spinner"></div>
+        <h4>Submitting House Registration</h4>
+        <p>Please wait while we save the record...</p>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+
+                navigator.geolocation.getCurrentPosition(function (position) {
+
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+
+                    $('#long').val(longitude);
+                    $('#lat').val(latitude);
+
+                });
+
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        //function sendLocation(lat, lng) {
+
+        //    fetch('/Home/SaveLocation', {
+        //        method: 'POST',
+        //        headers: {
+        //            'Content-Type': 'application/json'
+        //        },
+        //        body: JSON.stringify({ latitude: lat, longitude: lng })
+        //    });
+
+        //}
+    </script>
+
+
+    <script>
+        function startCamera() {
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+
+                    document.getElementById("video").srcObject = stream;
+
+                })
+                .catch(function (error) {
+
+                    alert("Camera access denied");
+
+                });
+
+        }
+    </script>
+    <script>
+        document.querySelector("form").addEventListener("submit", function () {
+
+            document.getElementById("processingOverlay").style.display = "block";
+
+            document.querySelector(".btnsubmit").disabled = true;
+            document.querySelector(".btnsubmit").value = "Processing...";
+
+        });
+
+    </script>
+}

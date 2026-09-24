@@ -1,0 +1,36 @@
+﻿
+@model TnaboExtApp.Models.Payment
+
+@{
+    ViewData["Title"] = "Payment Details";
+}
+
+<h1>Payment</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+        <dt class="col-sm-2">House</dt>
+        <dd class="col-sm-10">@Model.House?.HouseNo ?? Model.HouseId?.ToString()</dd>
+        <dt class="col-sm-2">Amount</dt>
+        <dd class="col-sm-10">@Model.Amount.ToString("C")</dd>
+        <dt class="col-sm-2">Amount Paid</dt>
+        <dd class="col-sm-10">@Model.AmountPaid.ToString("C")</dd>
+        <dt class="col-sm-2">Balance Left</dt>
+        <dd class="col-sm-10">@((Model.Amount - Model.AmountPaid).ToString("C"))</dd>
+        <dt class="col-sm-2">Period</dt>
+        <dd class="col-sm-10">@Model.Period</dd>
+        <dt class="col-sm-2">Payment Date</dt>
+        <dd class="col-sm-10">@Model.PaymentDate.ToString("yyyy-MM-dd")</dd>
+        <dt class="col-sm-2">Method</dt>
+        <dd class="col-sm-10">@Model.Method</dd>
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+    </dl>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-link">Back to List</a>
+</p>

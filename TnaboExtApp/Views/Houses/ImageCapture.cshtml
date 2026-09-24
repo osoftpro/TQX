@@ -1,0 +1,66 @@
+﻿<video id="video" width="300" autoplay></video>
+<br>
+
+<button onclick="startCamera()">Start Camera</button>
+<button onclick="capture()">Capture Photo</button>
+<button onclick="savePhoto()">Save Photo</button>
+
+<br>
+<br>
+
+<canvas id="canvas" width="300" height="200"></canvas>
+
+
+@section scripts{
+    <script>
+
+        function startCamera() {
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+
+                    document.getElementById("video").srcObject = stream;
+
+                })
+                .catch(function (error) {
+
+                    alert("Camera access denied");
+
+                });
+
+        }
+
+        function capture() {
+
+            var video = document.getElementById("video");
+            var canvas = document.getElementById("canvas");
+
+            var context = canvas.getContext("2d");
+
+            context.drawImage(video, 0, 0, 300, 200);
+
+        }
+
+        function savePhoto() {
+
+            var canvas = document.getElementById("canvas");
+
+            var imageData = canvas.toDataURL("image/png");
+
+            fetch('/Houses/SavePhoto', {
+
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify({ image: imageData, HouseId: @ViewBag.HouseId })
+
+            });
+
+        }
+
+    </script>
+}
+

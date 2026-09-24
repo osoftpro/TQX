@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TNABO Extension Portal</title>
+
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TnaboExtApp.styles.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --sidebar-width: 260px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #34495e 100%);
+            color: white;
+            padding-top: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h5 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-nav li {
+            margin: 0;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--accent-color);
+            padding-left: 25px;
+        }
+
+        .sidebar-nav i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .top-header {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .header-title p {
+            margin: 0;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-user .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #34495e 100%);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            padding: 20px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+        .stat-card .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+        }
+
+        .stat-card i {
+            font-size: 28px;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        /* Buttons */
+        .btn-primary, .btn-accent {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover, .btn-accent:hover {
+            background: #2980b9;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        /* Tables */
+        .table {
+            background: white;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: #f8f9fa;
+            color: var(--primary-color);
+            font-weight: 600;
+            border: none;
+            padding: 15px;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .table tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Badges */
+        .badge {
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .badge-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-pending {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Forms */
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+            margin-left: var(--sidebar-width);
+            border-top: 1px solid #34495e;
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-wrapper,
+            .footer {
+                margin-left: 0;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .header-title h1 {
+                font-size: 18px;
+            }
+
+            .top-header {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-building"></i> TNABO</h5>
+            <small>Extension Portal</small>
+        </div>
+        <nav class="sidebar-nav">
+            <li>
+                <a href="@Url.Action("Index", "Home")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Phases")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Phases" ? "active" : "")">
+                    <i class="fas fa-layer-group"></i> Phases
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Report", "Streets")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Streets" ? "active" : "")">
+                    <i class="fas fa-road"></i> Streets
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Report", "Houses")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Houses" ? "active" : "")">
+                    <i class="fas fa-house"></i> Houses
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "HouseStatus")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "HouseStatus" ? "active" : "")">
+                    <i class="fas fa-check-circle"></i> House Status
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Payments")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Payments" ? "active" : "")">
+                    <i class="fas fa-money-bill-wave"></i> Payments
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Expenses")" class="@(ViewContext.RouteData.Values["Controller"]?.ToString() == "Expenses" ? "active" : "")">
+                    <i class="fas fa-credit-card"></i> Expenses
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Privacy", "Home")">
+                    <i class="fas fa-lock"></i> Privacy
+                </a>
+            </li>
+        </nav>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="header-title">
+                <h1>@ViewData["Title"]</h1>
+                <p>@DateTime.Now.ToString("dddd, MMMM d, yyyy")</p>
+            </div>
+            <div class="header-user">
+                <button class="btn btn-link" id="toggleSidebar" style="display: none;">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <partial name="_LoginPartial" />
+            </div>
+        </header>
+
+        <main class="main-content" role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div>
+            &copy; 2026 - TNABO Extension Portal -
+            <a href="@Url.Action("Privacy", "Home")" style="color: #3498db; text-decoration: none;">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Active link highlighting
+            const currentUrl = window.location.pathname;
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
+                if (link.href.includes(currentUrl)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Mobile sidebar toggle
+            document.getElementById('toggleSidebar')?.addEventListener('click', function () {
+                document.querySelector('.sidebar').classList.toggle('show');
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

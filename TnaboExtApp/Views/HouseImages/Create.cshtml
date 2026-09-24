@@ -1,0 +1,50 @@
+﻿@model TnaboExtApp.Models.HouseImage
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>HouseImage</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="HouseId" class="control-label"></label>
+                <input asp-for="HouseId" class="form-control" />
+                <span asp-validation-for="HouseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HouseNo" class="control-label"></label>
+                <input asp-for="HouseNo" class="form-control" />
+                <span asp-validation-for="HouseNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecordedBy" class="control-label"></label>
+                <input asp-for="RecordedBy" class="form-control" />
+                <span asp-validation-for="RecordedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateRecorded" class="control-label"></label>
+                <input asp-for="DateRecorded" class="form-control" />
+                <span asp-validation-for="DateRecorded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

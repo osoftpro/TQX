@@ -1,0 +1,76 @@
+﻿@model TnaboExtApp.Models.Payment
+
+@{
+    ViewData["Title"] = "Record Payment";
+}
+
+<h1 class="mb-3">Record Payment</h1>
+
+<form asp-action="Create" method="post" class="row g-3">
+    @Html.AntiForgeryToken()
+    @* Show model-level validation messages *@
+    <div class="col-12">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="HouseId" class="form-label">House</label>
+        <select asp-for="HouseId" class="form-select" asp-items="ViewBag.Houses" aria-required="false">
+            <option value="">-- None --</option>
+        </select>
+        <span asp-validation-for="HouseId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-2">
+        <label asp-for="Amount" class="form-label">Amount</label>
+        <input asp-for="Amount" type="number" step="0.01" class="form-control" aria-required="true" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-2">
+        <label asp-for="AmountPaid" class="form-label">Amount Paid</label>
+        <input asp-for="AmountPaid" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="AmountPaid" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-2">
+        <label asp-for="Period" class="form-label">Period</label>
+        <select asp-for="Period" class="form-select" asp-items="ViewBag.Periods" aria-required="true">
+            <option value="">-- Select Period --</option>
+        </select>
+        <span asp-validation-for="Period" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-2">
+        <label asp-for="PaymentDate" class="form-label">Payment Date</label>
+        <input asp-for="PaymentDate" type="date" class="form-control" />
+        <span asp-validation-for="PaymentDate" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Method" class="form-label">Method</label>
+        <select asp-for="Method" class="form-select" asp-items="ViewBag.Methods">
+            <option value="">-- Select Method --</option>
+        </select>
+        <span asp-validation-for="Method" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Status" class="form-label">Status</label>
+        <select asp-for="Status" class="form-select" aria-required="true">
+            <option value="" selected disabled>-- Select Status --</option>
+            <option value="Paid">-- Paid --</option>
+            <option value="Partial">-- Partial --</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-link">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
